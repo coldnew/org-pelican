@@ -170,8 +170,7 @@ INFO is a plist used as a communication channel."
           (concat
            (org-html-close-tag "meta"
                                (format " name=\"date\" content=\"%s\"\n"
-                                       (funcall protect-string date)
-                                       )
+                                       (funcall protect-string date))
                                info)
            "\n"))
      (and (org-string-nw-p category)
