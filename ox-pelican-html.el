@@ -35,8 +35,6 @@
 (require 'ox-html)
 (require 'ox-publish)
 
-(require 'ox-pelican)
-
 
 ;;;; Backend
 
