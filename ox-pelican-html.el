@@ -69,7 +69,7 @@ a communication channel."
          (fix-contents
           (replace-regexp-in-string
            (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents))
-         ;; Unfill paragraph to make contents look mode better
+         ;; Unfill paragraph to make contents look more better
          (unfill-contents
           (with-temp-buffer
             (insert fix-contents)
@@ -171,7 +171,7 @@ INFO is a plist used as a communication channel."
            (org-html-close-tag "meta"
                                (format " name=\"date\" content=\"%s\"\n"
                                        (funcall protect-string date))
-                               info)
+                              info)
            "\n"))
      (and (org-string-nw-p category)
           (concat
