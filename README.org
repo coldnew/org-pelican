@@ -1,0 +1,6 @@
+#+TITLE: org-pelican org-mde exporter for pelican
+
+org-pelican is an org-mode exporter for [[https://github.com/getpelican/pelican][pelican]] static site generator.
+
+This project is under *EXPERIMENTAL* state and used by [[https://github.com/coldnew/emacs-blogit][emacs-blogit]] project,
+currently it only suppport generate =HTML= file to let pelican parse it.
