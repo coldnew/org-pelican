@@ -1,4 +1,4 @@
-#+TITLE: org-pelican org-mde exporter for pelican
+#+TITLE: org-pelican -- org-mde exporter for pelican
 
 org-pelican is an org-mode exporter for [[https://github.com/getpelican/pelican][pelican]] static site generator.
 
