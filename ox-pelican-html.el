@@ -51,6 +51,7 @@
   :options-alist
   '((:date "DATE" nil nil)
     (:category "CATEGORY" nil nil)
+    (:tags "TAGS" nil nil)
     )
   )
 
@@ -136,16 +137,29 @@ contents as a string, or nil if it is empty."
 (defun org-pelican-html--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
-  (let ((protect-string
-         (lambda (str)
-           (replace-regexp-in-string
-            "\"" "&quot;" (org-html-encode-plain-text str))))
-        ;; FIXME:
-        (date (org-pelican-html--parse-date info))
-        (category (plist-get info :category))
-        (tags (plist-get info :tags))
-        (save-as (plist-get info :save_as))
-        (url (plist-get info :url)))
+  (let* ((protect-string
+          (lambda (str)
+            (replace-regexp-in-string
+             "\"" "&quot;" (org-html-encode-plain-text str))))
+         (protect-string-compact
+          ;; FIXME: add option to enable/disable this
+          ;; convert:
+          ;;   _        -> space
+          ;;   <space>  -> ,
+          ;;   @        -> -
+          (lambda (str)
+            (replace-regexp-in-string
+             "_" " "
+             (replace-regexp-in-string
+              " " ","
+              (replace-regexp-in-string
+               "@" "-"  (funcall protect-string str))))))
+         ;; FIXME:
+         (date (org-pelican-html--parse-date info))
+         (category (plist-get info :category))
+         (tags (plist-get info :tags))
+         (save-as (plist-get info :save_as))
+         (url (plist-get info :url)))
     (concat
      ;; Use ox-html to generate basic metainfo
      (org-html--build-meta-info info)
@@ -159,15 +173,22 @@ INFO is a plist used as a communication channel."
                                        (funcall protect-string date)
                                        )
                                info)
-           "\n")
-          )
+           "\n"))
      (and (org-string-nw-p category)
           (concat
            (org-html-close-tag "meta"
                                (format " name=\"category\" content=\"%s\""
                                        (funcall protect-string category))
                                info)
-           "\n")))))
+           "\n"))
+     (and (org-string-nw-p tags)
+          (concat
+           (org-html-close-tag "meta"
+                               (format " name=\"tags\" content=\"%s\""
+                                       (funcall protect-string-compact tags))
+                               info)
+           "\n"))
+     )))
 
 (defun org-pelican-html-template (contents info)
   "Return complete document string after HTML conversion.
