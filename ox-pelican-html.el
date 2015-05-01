@@ -50,6 +50,7 @@
     )
   :options-alist
   '((:date "DATE" nil nil)
+    (:category "CATEGORY" nil nil)
     )
   )
 
@@ -123,6 +124,15 @@ contents as a string, or nil if it is empty."
                           (apply 'encode-time (org-parse-time-string
                                                (org-element-property :raw-value date)))))))
 
+;; :date: 2010-10-03 10:20
+;; :modified: 2010-10-04 18:40
+;; :tags: thats, awesome
+;; :category: yeah
+;; :slug: my-super-post
+;; :authors: Alexis Metaireau, Conan Doyle
+;; :summary: Short version for index and feeds
+;; :lang: en
+;; :translation: true
 (defun org-pelican-html--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
@@ -130,35 +140,18 @@ INFO is a plist used as a communication channel."
          (lambda (str)
            (replace-regexp-in-string
             "\"" "&quot;" (org-html-encode-plain-text str))))
-        (title (org-export-data (plist-get info :title) info))
-        (author (and (plist-get info :with-author)
-                     (let ((auth (plist-get info :author)))
-                       (and auth
-                            ;; Return raw Org syntax, skipping non
-                            ;; exportable objects.
-                            (org-element-interpret-data
-                             (org-element-map auth
-                                 (cons 'plain-text org-element-all-objects)
-                               'identity info))))))
+        ;; FIXME:
         (date (org-pelican-html--parse-date info))
         (category (plist-get info :category))
         (tags (plist-get info :tags))
         (save-as (plist-get info :save_as))
         (url (plist-get info :url)))
     (concat
-     (format "<title>%s</title>\n" title)
-     (when (plist-get info :time-stamp-file)
-       (format-time-string
-        (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
+     ;; Use ox-html to generate basic metainfo
+     (org-html--build-meta-info info)
+
      (org-html-close-tag "meta" " name=\"generator\" content=\"org-pelican\"" info)
      "\n"
-     (and (org-string-nw-p author)
-          (concat
-           (org-html-close-tag "meta"
-                               (format " name=\"author\" content=\"%s\""
-                                       (funcall protect-string author))
-                               info)
-           "\n"))
      (and (org-string-nw-p date)
           (concat
            (org-html-close-tag "meta"
