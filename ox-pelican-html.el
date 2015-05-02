@@ -104,6 +104,12 @@ holding export options."
 
 
 ;;;; Link
+
+;; FIXME:
+;; Deprecated internal link syntax
+
+;; To remain compatible with earlier versions, Pelican still supports vertical bars (||) in addition to curly braces ({}) for internal links. For example: |filename|an_article.rst, |tag|tagname, |category|foobar. The syntax was changed from || to {} to avoid collision with Markdown extensions or reST directives. Support for the old syntax may eventually be removed.
+
 (defun org-pelican-html-link (link desc info)
   "Transcode a LINK object from Org to HTML.
 
