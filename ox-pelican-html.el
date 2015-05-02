@@ -6,7 +6,7 @@
 ;; Keywords:
 ;; X-URL: http://github.com/coldnew/org-pelican
 ;; Version: 0.1
-;; Package-Requires: ((org "8.0") (cl-lib "0.5") (f "0.17.2"))
+;; Package-Requires: ((org "8.0") (cl-lib "0.5") (f "0.17.2") (noflet "0.0.11"))
 
 ;; This file is not part of GNU Emacs.
 
