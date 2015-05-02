@@ -49,11 +49,10 @@
     (inner-template . org-pelican-html-inner-template)
     )
   :options-alist
-  '((:date "DATE" nil nil)
-    (:category "CATEGORY" nil nil)
-    (:tags "TAGS" nil nil)
-    )
-  )
+  '((:date     "DATE"       nil     nil)
+    (:category "CATEGORY"   nil     nil)
+    (:tags     "TAGS"       nil     nil)
+    ))
 
 
 ;;;; Paragraph
