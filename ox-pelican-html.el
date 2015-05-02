@@ -47,6 +47,8 @@
     ;; FIXME: this should move back to blogit?
     ;; Fix toc for blogit theme
     (inner-template . org-pelican-html-inner-template)
+    ;; convert relative link to let pelican can recognize
+    (link . org-pelican-html-link)
     )
   :options-alist
   '(;; pelican metadata
@@ -99,6 +101,41 @@ holding export options."
    contents
    ;; Footnotes section.
    (org-html-footnote-section info)))
+
+
+;;;; Link
+(defun org-pelican-html-link (link desc info)
+  "Transcode a LINK object from Org to HTML.
+
+DESC is the description part of the link, or the empty string.
+INFO is a plist holding contextual information.  See
+`org-export-data'.
+
+In this function, we also add link file"
+  (let* ((org-html-link-org-files-as-html nil)
+         (type (org-element-property :type link))
+         (raw-link (org-element-property :path link))
+         (raw-path (expand-file-name raw-link))
+         (encode-path (expand-file-name (org-link-unescape raw-path)))
+         (html-link (org-html-link link desc info))
+         (link-prefix "<a href=\"")
+         new-path link-to-convert)
+
+    ;; file
+    (when (string= type "file")
+      ;; check if file porint to absolute path
+      (if (file-name-absolute-p raw-link)
+          (progn
+            ;; calculate relative link for current post
+            (setq raw-link (f-relative raw-path
+                                       (file-name-directory (buffer-file-name (current-buffer)))))
+            (setq html-link (s-replace (concat "file://" raw-path) raw-link html-link))))
+
+      ;; convert relative path from `data/xxx.png' to `|filename|data/xxx.png'
+      (setq html-link (s-replace raw-link
+                                 (concat "|filename|" raw-link) html-link))
+      )
+    html-link))
 
 
 ;;; Tables of Contents
@@ -161,14 +198,14 @@ INFO is a plist used as a communication channel."
               (replace-regexp-in-string
                "@" "-"  (protect-string str)))))
            (build--metainfo (name var func)
-            (and (org-string-nw-p var)
-                 (concat
-                  (org-html-close-tag "meta"
-                                      (format " name=\"%s\" content=\"%s\"\n"
-                                              name
-                                              (funcall func var))
-                                      info)
-                  "\n")))
+                            (and (org-string-nw-p var)
+                                 (concat
+                                  (org-html-close-tag "meta"
+                                                      (format " name=\"%s\" content=\"%s\"\n"
+                                                              name
+                                                              (funcall func var))
+                                                      info)
+                                  "\n")))
 
            (build-generic-metainfo
             (name var)
