@@ -57,6 +57,7 @@
     (:tags     "TAGS"       nil     nil)
     (:url      "URL"        nil     nil)
     (:save_as  "SAVE_AS"    nil     nil)
+    (:slug     "SLUG"       nil     nil)
     ;; override default ox-html.el options-alist
     (:html-head-include-scripts nil "html-scripts" nil)
     (:html-head-include-default-style nil "html-style" nil)
@@ -222,7 +223,8 @@ INFO is a plist used as a communication channel."
           (category (plist-get info :category))
           (tags (plist-get info :tags))
           (save_as (plist-get info :save_as))
-          (url (plist-get info :url)))
+          (url (plist-get info :url))
+          (slug (plist-get info :slug)))
       (concat
        ;; Use ox-html to generate basic metainfo
        (org-html--build-meta-info info)
@@ -233,6 +235,7 @@ INFO is a plist used as a communication channel."
        (build-generic-metainfo "date" date)
        (build-generic-metainfo "url" url)
        (build-generic-metainfo "save_as" save_as)
+       (build-generic-metainfo "slug" slug)
 
        ;; compact version
        (build-compact-metainfo "category" category)
