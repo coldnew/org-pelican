@@ -124,17 +124,15 @@ In this function, we also add link file"
     ;; file
     (when (string= type "file")
       ;; check if file porint to absolute path
-      (if (file-name-absolute-p raw-link)
-          (progn
-            ;; calculate relative link for current post
-            (setq raw-link (f-relative raw-path
-                                       (file-name-directory (buffer-file-name (current-buffer)))))
-            (setq html-link (s-replace (concat "file://" raw-path) raw-link html-link))))
+      (when (file-name-absolute-p raw-link)
+        ;; calculate relative link for current post
+        (setq raw-link (f-relative raw-path
+                                   (file-name-directory (buffer-file-name (current-buffer)))))
+        (setq html-link (s-replace (concat "file://" raw-path) raw-link html-link)))
 
       ;; convert relative path from `data/xxx.png' to `|filename|data/xxx.png'
       (setq html-link (s-replace raw-link
-                                 (concat "|filename|" raw-link) html-link))
-      )
+                                 (concat "|filename|" raw-link) html-link)))
     html-link))
 
 
