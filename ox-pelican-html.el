@@ -52,6 +52,8 @@
   '((:date     "DATE"       nil     nil)
     (:category "CATEGORY"   nil     nil)
     (:tags     "TAGS"       nil     nil)
+    (:url      "URL"        nil     nil)
+    (:save_as  "SAVE_AS"    nil     nil)
     ))
 
 
@@ -153,11 +155,10 @@ INFO is a plist used as a communication channel."
               " " ","
               (replace-regexp-in-string
                "@" "-"  (funcall protect-string str))))))
-         ;; FIXME:
          (date (org-pelican-html--parse-date info))
          (category (plist-get info :category))
          (tags (plist-get info :tags))
-         (save-as (plist-get info :save_as))
+         (save_as (plist-get info :save_as))
          (url (plist-get info :url)))
     (concat
      ;; Use ox-html to generate basic metainfo
@@ -184,6 +185,20 @@ INFO is a plist used as a communication channel."
            (org-html-close-tag "meta"
                                (format " name=\"tags\" content=\"%s\""
                                        (funcall protect-string-compact tags))
+                               info)
+           "\n"))
+     (and (org-string-nw-p url)
+          (concat
+           (org-html-close-tag "meta"
+                               (format " name=\"url\" content=\"%s\""
+                                       (funcall protect-string url))
+                               info)
+           "\n"))
+     (and (org-string-nw-p save_as)
+          (concat
+           (org-html-close-tag "meta"
+                               (format " name=\"save_as\" content=\"%s\""
+                                       (funcall protect-string save_as))
                                info)
            "\n"))
      )))
