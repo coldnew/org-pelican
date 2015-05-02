@@ -142,70 +142,61 @@ contents as a string, or nil if it is empty."
 (defun org-pelican-html--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
-  (let* ((protect-string
-          (lambda (str)
+  (noflet ((protect-string
+            (str)
             (replace-regexp-in-string
-             "\"" "&quot;" (org-html-encode-plain-text str))))
-         (protect-string-compact
-          ;; FIXME: add option to enable/disable this
-          ;; convert:
-          ;;   _        -> space
-          ;;   <space>  -> ,
-          ;;   @        -> -
-          (lambda (str)
+             "\"" "&quot;" (org-html-encode-plain-text str)))
+
+           (protect-string-compact
+            ;; FIXME: add option to enable/disable this
+            ;; convert:
+            ;;   _        -> space
+            ;;   <space>  -> ,
+            ;;   @        -> -
+            (str)
             (replace-regexp-in-string
              "_" " "
              (replace-regexp-in-string
               " " ","
               (replace-regexp-in-string
-               "@" "-"  (funcall protect-string str))))))
-         (date (org-pelican-html--parse-date info))
-         (category (plist-get info :category))
-         (tags (plist-get info :tags))
-         (save_as (plist-get info :save_as))
-         (url (plist-get info :url)))
-    (concat
-     ;; Use ox-html to generate basic metainfo
-     (org-html--build-meta-info info)
+               "@" "-"  (protect-string str)))))
+           (build--metainfo (name var func)
+            (and (org-string-nw-p var)
+                 (concat
+                  (org-html-close-tag "meta"
+                                      (format " name=\"%s\" content=\"%s\"\n"
+                                              name
+                                              (funcall func var))
+                                      info)
+                  "\n")))
 
-     (org-html-close-tag "meta" " name=\"generator\" content=\"org-pelican\"" info)
-     "\n"
-     (and (org-string-nw-p date)
-          (concat
-           (org-html-close-tag "meta"
-                               (format " name=\"date\" content=\"%s\"\n"
-                                       (funcall protect-string date))
-                              info)
-           "\n"))
-     (and (org-string-nw-p category)
-          (concat
-           (org-html-close-tag "meta"
-                               (format " name=\"category\" content=\"%s\""
-                                       (funcall protect-string category))
-                               info)
-           "\n"))
-     (and (org-string-nw-p tags)
-          (concat
-           (org-html-close-tag "meta"
-                               (format " name=\"tags\" content=\"%s\""
-                                       (funcall protect-string-compact tags))
-                               info)
-           "\n"))
-     (and (org-string-nw-p url)
-          (concat
-           (org-html-close-tag "meta"
-                               (format " name=\"url\" content=\"%s\""
-                                       (funcall protect-string url))
-                               info)
-           "\n"))
-     (and (org-string-nw-p save_as)
-          (concat
-           (org-html-close-tag "meta"
-                               (format " name=\"save_as\" content=\"%s\""
-                                       (funcall protect-string save_as))
-                               info)
-           "\n"))
-     )))
+           (build-generic-metainfo
+            (name var)
+            (build--metainfo name var 'protect-string))
+           (build-compact-metainfo
+            (name var)
+            (build--metainfo name var 'protect-string-compact))
+           )
+    (let ((date (org-pelican-html--parse-date info))
+          (category (plist-get info :category))
+          (tags (plist-get info :tags))
+          (save_as (plist-get info :save_as))
+          (url (plist-get info :url)))
+      (concat
+       ;; Use ox-html to generate basic metainfo
+       (org-html--build-meta-info info)
+
+       (org-html-close-tag "meta" " name=\"generator\" content=\"org-pelican\"" info)
+       "\n"
+
+       (build-generic-metainfo "date" date)
+       (build-generic-metainfo "url" url)
+       (build-generic-metainfo "save_as" save_as)
+
+       ;; compact version
+       (build-compact-metainfo "category" category)
+       (build-compact-metainfo "tags" tags)
+       ))))
 
 (defun org-pelican-html-template (contents info)
   "Return complete document string after HTML conversion.
