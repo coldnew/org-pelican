@@ -206,7 +206,7 @@ INFO is a plist used as a communication channel."
                             (and (org-string-nw-p var)
                                  (concat
                                   (org-html-close-tag "meta"
-                                                      (format " name=\"%s\" content=\"%s\"\n"
+                                                      (format " name=\"%s\" content=\"%s\""
                                                               name
                                                               (funcall func var))
                                                       info)
