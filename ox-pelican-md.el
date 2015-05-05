@@ -45,6 +45,8 @@
     (paragraph . org-pelican-md-paragraph)
     ;; Fix for pelican metadata
     (template . org-pelican-md-template)
+    ;; Fix link path to suite for pelican
+    (link . org-pelican-md-link)
     )
   :options-alist
   '(
@@ -92,6 +94,35 @@ a communication channel."
 
     ;; Send modify data to org-md-paragraph
     (org-md-paragraph paragraph unfill-contents info)))
+
+
+;;;; Link
+
+(defun org-pelican-md-link (link contents info)
+  "Transcode LINE-BREAK object into Markdown format.
+CONTENTS is the link's description.  INFO is a plist used as
+a communication channel."
+  (let* ((org-md-link-org-files-as-md nil)
+         (raw-link (org-element-property :path link))
+         (raw-path (expand-file-name raw-link))
+         (type (org-element-property :type link))
+         (encode-path (expand-file-name (org-link-unescape raw-path)))
+         (md-link (org-md-link link contents info))
+         new-path link-to-convert)
+
+    ;; file
+    (when (string= type "file")
+      ;; check if file porint to absolute path
+      (when (file-name-absolute-p raw-link)
+        ;; calculate relative link for current post
+        (setq raw-link (f-relative raw-path
+                                   (file-name-directory (buffer-file-name (current-buffer)))))
+        (setq md-link (s-replace (concat "file://" raw-path) raw-link md-link)))
+
+      ;; convert relative path from `data/xxx.png' to `{filename}data/xxx.png'
+      (setq md-link (s-replace raw-link
+                                 (concat "{filename}" raw-link) md-link)))
+    md-link))
 
 
 ;;;; Template
