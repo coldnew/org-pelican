@@ -215,5 +215,5 @@ Return output file name."
   (org-publish-org-to 'pelican-md filename ".md"
                       plist pub-dir))
 
-(provide 'ox-pelican-html)
+(provide 'ox-pelican-md)
 ;;; ox-pelican-md.el ends here.
