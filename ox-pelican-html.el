@@ -163,14 +163,15 @@ contents as a string, or nil if it is empty."
 
 (defun org-pelican-html--parse-date (info)
   (let ((date (car (plist-get info :date))))
-    (if (stringp date)
-        ;; FIXME: move to blogit?
-        ;; backward compability with blogit
-        date
-      ;; parse org-timestamp
-      (format-time-string "%Y-%m-%d %H:%M:%S"
-                          (apply 'encode-time (org-parse-time-string
-                                               (org-element-property :raw-value date)))))))
+    (and (org-string-nw-p date)
+      (if (stringp date)
+          ;; FIXME: move to blogit?
+          ;; backward compability with blogit
+          date
+        ;; parse org-timestamp
+        (format-time-string "%Y-%m-%d %H:%M:%S"
+                            (apply 'encode-time (org-parse-time-string
+                                                 (org-element-property :raw-value date))))))))
 
 ;; :date: 2010-10-03 10:20
 ;; :modified: 2010-10-04 18:40
