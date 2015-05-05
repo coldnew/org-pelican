@@ -204,7 +204,7 @@ is non-nil."
     (lambda () (markdown-mode))))
 
 ;;;###autoload
-(defun org-pelican-publish-to-rst (plist filename pub-dir)
+(defun org-pelican-publish-to-md (plist filename pub-dir)
   "Publish an org file to rst.
 
 FILENAME is the filename of the Org file to be published.  PLIST
