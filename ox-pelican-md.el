@@ -128,14 +128,15 @@ INFO is a plist used as a communication channel."
             (build--metainfo name var 'protect-string-compact))
            )
     (let ((date (org-pelican-html--parse-date info))
+          (title (plist-get info :title))
           (category (plist-get info :category))
           (tags (plist-get info :tags))
           (save_as (plist-get info :save_as))
           (url (plist-get info :url))
           (slug (plist-get info :slug)))
       (concat
+       (build-generic-metainfo "Title" (org-export-data (or title "") info))
        (build-generic-metainfo "Date" date)
-
        (build-generic-metainfo "Url" url)
        (build-generic-metainfo "Save_as" save_as)
        (build-generic-metainfo "Slug" slug)
