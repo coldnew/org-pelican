@@ -32,7 +32,7 @@
 
 ;;;; Load all pelican functions
 (mapcar (lambda (x) (require (intern (format "ox-pelican-%s" x)) nil t))
-        '("html"))
+        '("html" "md"))
 
 ;;;; Group
 
