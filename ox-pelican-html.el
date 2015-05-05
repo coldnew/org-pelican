@@ -137,9 +137,9 @@ In this function, we also add link file"
                                    (file-name-directory (buffer-file-name (current-buffer)))))
         (setq html-link (s-replace (concat "file://" raw-path) raw-link html-link)))
 
-      ;; convert relative path from `data/xxx.png' to `|filename|data/xxx.png'
+      ;; convert relative path from `data/xxx.png' to `{filename}data/xxx.png'
       (setq html-link (s-replace raw-link
-                                 (concat "|filename|" raw-link) html-link)))
+                                 (concat "{filename}" raw-link) html-link)))
     html-link))
 
 
