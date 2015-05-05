@@ -30,17 +30,17 @@
 
 (eval-when-compile (require 'cl-lib))
 
+;;;; Group
+
+(defgroup org-pelican nil
+  "Options for exporting Org mode files to pelican."
+  :tag "Org Export to pelican html/md files."
+  :group 'org-export
+  :link '(url-link :tag "Github" "https://github.com/coldnew/org-pelican"))
+
 ;;;; Load all pelican functions
 (mapcar (lambda (x) (require (intern (format "ox-pelican-%s" x)) nil t))
         '("html" "md"))
-
-;;;; Group
-
-(defgroup org-export-pelican nil
-  "Options for exporting Org mode files to pelican."
-  :tag "Org Export to pelican html files."
-  :group 'org-export
-  :link '(url-link :tag "Github" "https://github.com/coldnew/org-pelican"))
 
 (provide 'ox-pelican)
 ;;; ox-pelican.el ends here.
