@@ -41,6 +41,9 @@
 (org-export-define-derived-backend 'pelican-md 'md
   :translate-alist
   '(
+    ;; Fix for multibyte language
+    (paragraph . org-pelican-md-paragraph)
+    ;; Fix for pelican metadata
     (template . org-pelican-md-template)
     )
   :options-alist
@@ -55,18 +58,43 @@
     ;; Summary: Short version for index and feeds
 
     ;; ;; pelican metadata
-    ;; (:date     "DATE"       nil     nil)
+    (:date     "DATE"       nil     nil)
     (:category "CATEGORY"   nil     nil)
-    ;; (:tags     "TAGS"       nil     nil)
-    ;; (:url      "URL"        nil     nil)
-    ;; (:save_as  "SAVE_AS"    nil     nil)
-    ;; (:slug     "SLUG"       nil     nil)
+    (:tags     "TAGS"       nil     nil)
+    (:url      "URL"        nil     nil)
+    (:save_as  "SAVE_AS"    nil     nil)
+    (:slug     "SLUG"       nil     nil)
     ;; ;; override default ox-html.el options-alist
     ;; (:html-head-include-scripts nil "html-scripts" nil)
     ;; (:html-head-include-default-style nil "html-style" nil)
     ))
 
 
+;;;; Paragraph
+
+(defun org-pelican-md-paragraph (paragraph contents info)
+  "Transcode PARAGRAPH element into Markdown format.
+CONTENTS is the paragraph contents.  INFO is a plist used as
+a communication channel."
+  ;; Fix multibyte language like chinese will be automatically add
+  ;; some space since org-mode will transpose auto-fill-mode's space
+  ;; to newline char.
+  (let* ((fix-regexp "[[:multibyte:]]")
+         (fix-contents
+          (replace-regexp-in-string
+           (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents))
+         ;; Unfill paragraph to make contents look mode better
+         (unfill-contents
+          (with-temp-buffer
+            (insert fix-contents)
+            (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil (point-min) (point-max))
+            (buffer-string))))
+
+    ;; Send modify data to org-md-paragraph
+    (org-md-paragraph paragraph unfill-contents info)))
+
+
+;;;; Template
 (defun org-pelican-md--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
@@ -106,10 +134,10 @@ INFO is a plist used as a communication channel."
           (url (plist-get info :url))
           (slug (plist-get info :slug)))
       (concat
-       ;;       (build-generic-metainfo "date" date)
+       (build-generic-metainfo "Date" date)
 
        (build-generic-metainfo "Url" url)
-       (build-generic-metainfo "save_as" save_as)
+       (build-generic-metainfo "Save_as" save_as)
        (build-generic-metainfo "Slug" slug)
 
        ;; compact version
