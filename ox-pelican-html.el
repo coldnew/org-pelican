@@ -102,10 +102,8 @@ INFO is a plist holding contextual information.  See
 `org-export-data'.
 
 In this function, we also add link file"
-  (let* ((org-html-link-org-files-as-html nil)
-         (pelican-link
-          (org-pelican--link 'org-html-link link desc info)))
-    pelican-link))
+  (let ((org-html-link-org-files-as-html nil))
+    (org-pelican--link 'org-html-link link desc info)))
 
 
 ;;; Tables of Contents

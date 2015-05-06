@@ -90,10 +90,8 @@ a communication channel."
   "Transcode LINE-BREAK object into Markdown format.
 CONTENTS is the link's description.  INFO is a plist used as
 a communication channel."
-  (let* ((org-md-link-org-files-as-md nil)
-         (pelican-link
-          (org-pelican--link 'org-md-link link contents info)))
-    pelican-link))
+  (let ((org-md-link-org-files-as-md nil))
+    (org-pelican--link 'org-md-link link contents info)))
 
 
 ;;;; Template
