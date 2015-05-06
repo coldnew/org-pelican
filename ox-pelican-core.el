@@ -32,6 +32,7 @@
 
 (require 'noflet)
 (require 'f)
+(require 's)
 (require 'ox-publish)
 
 
