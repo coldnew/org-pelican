@@ -62,6 +62,7 @@ a communication channel."
 ;;;; Metadata
 
 (defun org-pelican--parse-date (info)
+  "Parse #+DATE: value."
   (let ((date (car (plist-get info :date))))
     (and (org-string-nw-p date)
          (if (stringp date)
@@ -73,6 +74,10 @@ a communication channel."
                                (apply 'encode-time (org-parse-time-string
                                                     (org-element-property :raw-value date))))))))
 
+(defun org-pelican--parse-title (info)
+  "Parse #+TITLE: value."
+  (let ((title (plist-get info :title)))
+    (org-export-data (or title "") info)))
 
 (provide 'ox-pelican-core)
 ;;; ox-pelican-core.el ends here.
