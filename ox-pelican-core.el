@@ -59,6 +59,32 @@ a communication channel."
     (funcall func paragraph unfill-contents info)))
 
 
+;;;; Link
+
+(defun org-pelican--link (func link contents info)
+  "Transcode LINE-BREAK object into Markdown format.
+CONTENTS is the link's description.  INFO is a plist used as
+a communication channel."
+  (let* ((type (org-element-property :type link))
+         (raw-link (org-element-property :path link))
+         (raw-path (expand-file-name raw-link))
+         (pelican-link (funcall func link contents info)))
+
+    ;; file
+    (when (string= type "file")
+      ;; check if file porint to absolute path
+      (when (file-name-absolute-p raw-link)
+        ;; calculate relative link for current post
+        (setq raw-link (f-relative raw-path
+                                   (file-name-directory (buffer-file-name (current-buffer)))))
+        (setq pelican-link (s-replace (concat "file://" raw-path) raw-link pelican-link)))
+
+      ;; convert relative path from `data/xxx.png' to `{filename}data/xxx.png'
+      (setq pelican-link (s-replace raw-link
+                                    (concat "{filename}" raw-link) pelican-link)))
+    pelican-link))
+
+
 ;;;; Metadata
 
 (defun org-pelican--parse-date (info)

@@ -94,11 +94,6 @@ holding export options."
 
 ;;;; Link
 
-;; FIXME:
-;; Deprecated internal link syntax
-
-;; To remain compatible with earlier versions, Pelican still supports vertical bars (||) in addition to curly braces ({}) for internal links. For example: |filename|an_article.rst, |tag|tagname, |category|foobar. The syntax was changed from || to {} to avoid collision with Markdown extensions or reST directives. Support for the old syntax may eventually be removed.
-
 (defun org-pelican-html-link (link desc info)
   "Transcode a LINK object from Org to HTML.
 
@@ -108,27 +103,9 @@ INFO is a plist holding contextual information.  See
 
 In this function, we also add link file"
   (let* ((org-html-link-org-files-as-html nil)
-         (type (org-element-property :type link))
-         (raw-link (org-element-property :path link))
-         (raw-path (expand-file-name raw-link))
-         (encode-path (expand-file-name (org-link-unescape raw-path)))
-         (html-link (org-html-link link desc info))
-         (link-prefix "<a href=\"")
-         new-path link-to-convert)
-
-    ;; file
-    (when (string= type "file")
-      ;; check if file porint to absolute path
-      (when (file-name-absolute-p raw-link)
-        ;; calculate relative link for current post
-        (setq raw-link (f-relative raw-path
-                                   (file-name-directory (buffer-file-name (current-buffer)))))
-        (setq html-link (s-replace (concat "file://" raw-path) raw-link html-link)))
-
-      ;; convert relative path from `data/xxx.png' to `{filename}data/xxx.png'
-      (setq html-link (s-replace raw-link
-                                 (concat "{filename}" raw-link) html-link)))
-    html-link))
+         (pelican-link
+          (org-pelican--link 'org-html-link link desc info)))
+    pelican-link))
 
 
 ;;; Tables of Contents
