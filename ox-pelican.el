@@ -39,8 +39,12 @@
   :link '(url-link :tag "Github" "https://github.com/coldnew/org-pelican"))
 
 ;;;; Load all pelican functions
+;; ox-pelican-core.el -- core or common use functions
+;; ox-pelican-html.el -- HTML exporter
+;; ox-pelican-md.el   -- Markdown exporter
+;;
 (mapcar (lambda (x) (require (intern (format "ox-pelican-%s" x)) nil t))
-        '("html" "md"))
+        '("core" "html" "md"))
 
 (provide 'ox-pelican)
 ;;; ox-pelican.el ends here.

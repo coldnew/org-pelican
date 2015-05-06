@@ -35,6 +35,8 @@
 (require 'ox-html)
 (require 'ox-publish)
 
+(require 'ox-pelican-core)
+
 
 ;;;; Backend
 
@@ -70,22 +72,8 @@
   "Transcode PARAGRAPH element into Markdown format.
 CONTENTS is the paragraph contents.  INFO is a plist used as
 a communication channel."
-  ;; Fix multibyte language like chinese which will be automatically add
-  ;; some space since org-mode will transpose auto-fill-mode's space
-  ;; to newline char.
-  (let* ((fix-regexp "[[:multibyte:]]")
-         (fix-contents
-          (replace-regexp-in-string
-           (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents))
-         ;; Unfill paragraph to make contents look more better
-         (unfill-contents
-          (with-temp-buffer
-            (insert fix-contents)
-            (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil (point-min) (point-max))
-            (buffer-string))))
-
-    ;; Send modify data to org-html-paragraph
-    (org-html-paragraph paragraph unfill-contents info)))
+  (org-pelican--paragraph 'org-html-paragraph
+                          paragraph contents info))
 
 
 ;;; Template
@@ -161,18 +149,6 @@ contents as a string, or nil if it is empty."
 
 ;;; Template
 
-(defun org-pelican-html--parse-date (info)
-  (let ((date (car (plist-get info :date))))
-    (and (org-string-nw-p date)
-      (if (stringp date)
-          ;; FIXME: move to blogit?
-          ;; backward compability with blogit
-          date
-        ;; parse org-timestamp
-        (format-time-string "%Y-%m-%d %H:%M:%S"
-                            (apply 'encode-time (org-parse-time-string
-                                                 (org-element-property :raw-value date))))))))
-
 ;; :date: 2010-10-03 10:20
 ;; :modified: 2010-10-04 18:40
 ;; :tags: thats, awesome
@@ -220,7 +196,7 @@ INFO is a plist used as a communication channel."
             (name var)
             (build--metainfo name var 'protect-string-compact))
            )
-    (let ((date (org-pelican-html--parse-date info))
+    (let ((date (org-pelican--parse-date info))
           (category (plist-get info :category))
           (tags (plist-get info :tags))
           (save_as (plist-get info :save_as))
@@ -234,6 +210,7 @@ INFO is a plist used as a communication channel."
        "\n"
 
        (build-generic-metainfo "date" date)
+
        (build-generic-metainfo "url" url)
        (build-generic-metainfo "save_as" save_as)
        (build-generic-metainfo "slug" slug)

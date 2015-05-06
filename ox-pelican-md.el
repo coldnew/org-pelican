@@ -35,6 +35,8 @@
 (require 'ox-md)
 (require 'ox-publish)
 
+(require 'ox-pelican-core)
+
 
 ;;;; Backend
 
@@ -78,22 +80,8 @@
   "Transcode PARAGRAPH element into Markdown format.
 CONTENTS is the paragraph contents.  INFO is a plist used as
 a communication channel."
-  ;; Fix multibyte language like chinese will be automatically add
-  ;; some space since org-mode will transpose auto-fill-mode's space
-  ;; to newline char.
-  (let* ((fix-regexp "[[:multibyte:]]")
-         (fix-contents
-          (replace-regexp-in-string
-           (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents))
-         ;; Unfill paragraph to make contents look mode better
-         (unfill-contents
-          (with-temp-buffer
-            (insert fix-contents)
-            (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil (point-min) (point-max))
-            (buffer-string))))
-
-    ;; Send modify data to org-md-paragraph
-    (org-md-paragraph paragraph unfill-contents info)))
+  ;; Send modify data to org-md-paragraph
+  (org-pelican--paragraph 'org-md-paragraph paragraph contents info))
 
 
 ;;;; Link
@@ -121,7 +109,7 @@ a communication channel."
 
       ;; convert relative path from `data/xxx.png' to `{filename}data/xxx.png'
       (setq md-link (s-replace raw-link
-                                 (concat "{filename}" raw-link) md-link)))
+                               (concat "{filename}" raw-link) md-link)))
     md-link))
 
 
@@ -158,7 +146,7 @@ INFO is a plist used as a communication channel."
             (name var)
             (build--metainfo name var 'protect-string-compact))
            )
-    (let ((date (org-pelican-html--parse-date info))
+    (let ((date (org-pelican--parse-date info))
           (title (plist-get info :title))
           (category (plist-get info :category))
           (tags (plist-get info :tags))
