@@ -1,0 +1,14 @@
+# -*- mode: gitignore; -*-
+
+TODO.org
+
+*~
+\#*\#
+*.elc
+.\#*
+
+# flymake-mode
+*_flymake.*
+
+# cask packages
+.cask/
