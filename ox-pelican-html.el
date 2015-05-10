@@ -131,9 +131,9 @@ contents as a string, or nil if it is empty."
                        "nav"
                      "div")))
     (when toc-entries
-      (concat "<div id=\"toc\">"
+      (concat (format "<%s id=\"toc\">\n" outer-tag)
               (org-html--toc-text toc-entries)
-              "</div>\n"))))
+              (format "</%s>\n" outer-tag)))))
 
 
 ;;; Template
