@@ -186,3 +186,5 @@ Return output file name."
 
 (provide 'ox-pelican-md)
 ;;; ox-pelican-md.el ends here.
+
+;; TODO: pelican-toc support

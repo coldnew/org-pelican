@@ -108,6 +108,7 @@ In this function, we also add link file"
 
 ;;; Tables of Contents
 
+;; ref: https://github.com/ingwinlu/pelican-toc
 (defun org-pelican-html-toc (depth info)
   "Build a table of contents.
 DEPTH is an integer specifying the depth of the table.  INFO is a
