@@ -113,13 +113,26 @@ In this function, we also add link file"
 DEPTH is an integer specifying the depth of the table.  INFO is a
 plist used as a communication channel.  Return the table of
 contents as a string, or nil if it is empty."
+  ;; (let ((toc-entries
+  ;;        (mapcar (lambda (headline)
+  ;;                  (cons (org-html--format-toc-headline headline info)
+  ;;                        (org-export-get-relative-level headline info)))
+  ;;                (org-export-collect-headlines info depth))))
+  ;;   (when toc-entries
+  ;;     (format "<div class=\"table-of-contents\">\n\n")))
   (let ((toc-entries
          (mapcar (lambda (headline)
                    (cons (org-html--format-toc-headline headline info)
                          (org-export-get-relative-level headline info)))
-                 (org-export-collect-headlines info depth))))
+                 (org-export-collect-headlines info depth)))
+        (outer-tag (if (and (org-html-html5-p info)
+                            (plist-get info :html-html5-fancy))
+                       "nav"
+                     "div")))
     (when toc-entries
-      (format "<div class=\"table-of-contents\">\n\n"))))
+      (concat "<div id=\"toc\">"
+              (org-html--toc-text toc-entries)
+              "</div>\n"))))
 
 
 ;;; Template
