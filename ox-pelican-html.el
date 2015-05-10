@@ -84,8 +84,9 @@ CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (concat
    ;; Table of contents.
-   (let ((depth (plist-get info :with-toc)))
-     (when depth (org-pelican-html-toc depth info)))
+   ;; (let ((depth (plist-get info :with-toc)))
+   ;;   (when depth (org-pelican-html-toc depth info)))
+
    ;; Document contents.
    contents
    ;; Footnotes section.
@@ -114,13 +115,6 @@ In this function, we also add link file"
 DEPTH is an integer specifying the depth of the table.  INFO is a
 plist used as a communication channel.  Return the table of
 contents as a string, or nil if it is empty."
-  ;; (let ((toc-entries
-  ;;        (mapcar (lambda (headline)
-  ;;                  (cons (org-html--format-toc-headline headline info)
-  ;;                        (org-export-get-relative-level headline info)))
-  ;;                (org-export-collect-headlines info depth))))
-  ;;   (when toc-entries
-  ;;     (format "<div class=\"table-of-contents\">\n\n")))
   (let ((toc-entries
          (mapcar (lambda (headline)
                    (cons (org-html--format-toc-headline headline info)
@@ -207,6 +201,11 @@ INFO is a plist used as a communication channel."
        ;; compact version
        (build-compact-metainfo "category" category)
        (build-compact-metainfo "tags" tags)
+
+       ;; Table of contents
+       (let ((depth (plist-get info :with-toc)))
+         (when depth
+           (build-generic-metainfo "toc" (org-pelican-html-toc depth info))))
        ))))
 
 (defun org-pelican-html-template (contents info)
