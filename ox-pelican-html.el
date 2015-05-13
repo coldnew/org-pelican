@@ -198,6 +198,10 @@ INFO is a plist used as a communication channel."
        (build-generic-metainfo "save_as" save_as)
        (build-generic-metainfo "slug" slug)
 
+       ;; gravatar
+       (build-generic-metainfo "author_gravatar"
+                               (org-pelican--build-gravatar info))
+
        ;; compact version
        (build-compact-metainfo "category" category)
        (build-compact-metainfo "tags" tags)

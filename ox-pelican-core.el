@@ -106,5 +106,12 @@ a communication channel."
   (let ((title (plist-get info :title)))
     (org-export-data (or title "") info)))
 
+(defun org-pelican--build-gravatar (info)
+  (let ((email (plist-get info :email)))
+    (if email
+        (format "http://www.gravatar.com/avatar/%s" (md5 email))
+        "")))
+
+
 (provide 'ox-pelican-core)
 ;;; ox-pelican-core.el ends here.
