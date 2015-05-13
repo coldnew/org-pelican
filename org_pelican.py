@@ -31,7 +31,7 @@ class OrgFileGenerator(Generator):
         shutil.copy(src, dst)
 
     def copy_org_html(self, obj):
-        if obj.source_path.endswith('.html'):
+        if obj.source_path.endswith('.html') or obj.source_path.endswith('.md'):
             filename = self.strip_suffix(obj.source_path)
 
             if os.path.isfile(filename + '.org'):
