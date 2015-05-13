@@ -4,3 +4,20 @@ org-pelican is an org-mode exporter for [[https://github.com/getpelican/pelican]
 
 This project is under *EXPERIMENTAL* state and used by [[https://github.com/coldnew/emacs-blogit][emacs-blogit]] project,
 currently it only suppport generate =HTML= file to let pelican parse it.
+
+
+* Features
+
+- [X] Gravatar
+
+  Generate metadata for =author_gravatar= so it's no need to install =gravatar=
+  pelican plugins.
+
+- [X] Table of contains
+
+  Generate metadata for =toc=, which compatible with most pelican theme and it's
+  no need to use [[https://github.com/ingwinlu/pelican-toc][pelican-toc]] plugin.
+
+- [ ] Fancybox
+
+  Convert image link with fancybox support automatically.
