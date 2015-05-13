@@ -21,3 +21,12 @@ currently it only suppport generate =HTML= file to let pelican parse it.
 - [ ] Fancybox
 
   Convert image link with fancybox support automatically.
+
+* Pelican plugins support
+
+org-pelican also add pelican plugins support, which add following features.
+
+- [X] Copy .org source in =contents= folder
+
+  If you publish .org file with generate pelican html/md file, you can use
+  org-pelican plugin to copy .org file to output folder.
