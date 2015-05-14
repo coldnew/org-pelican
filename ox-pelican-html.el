@@ -218,12 +218,6 @@ holding export options."
    (org-pelican-html--build-meta-info info)
    "</head>\n"
    "<body>\n"
-   (let ((link-up (org-trim (plist-get info :html-link-up)))
-         (link-home (org-trim (plist-get info :html-link-home))))
-     (unless (and (string= link-up "") (string= link-home ""))
-       (format org-html-home/up-format
-               (or link-up link-home)
-               (or link-home link-up))))
 
    ;; Document contents.
    (format "<%s id=\"%s\">\n"
