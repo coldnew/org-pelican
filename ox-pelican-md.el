@@ -49,6 +49,8 @@
     (template . org-pelican-md-template)
     ;; Fix link path to suite for pelican
     (link . org-pelican-md-link)
+    ;; Make compatible with pelican
+    (src-block . org-pelican-md-src-block)
     )
   :options-alist
   '(
@@ -92,6 +94,20 @@ CONTENTS is the link's description.  INFO is a plist used as
 a communication channel."
   (let ((org-md-link-org-files-as-md nil))
     (org-pelican--link 'org-md-link link contents info)))
+
+
+;;;; Example Block and Src Block
+
+;;;; Src Block
+
+(defun org-pelican-md-src-block (src-block contents info)
+  "Transcode a SRC-BLOCK element from Org to HTML.
+CONTENTS holds the contents of the item.  INFO is a plist holding
+contextual information."
+  (let ((lang (org-element-property :language src-block)))
+    (format "    :::%s\n%s\n"
+            lang
+            (org-md-example-block src-block contents info))))
 
 
 ;;;; Template
