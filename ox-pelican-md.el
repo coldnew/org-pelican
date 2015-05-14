@@ -95,14 +95,6 @@ a communication channel."
 
 
 ;;;; Template
-(defun org-pelican-md--protect-string (str)
-  "Convert \" -> &quot;"
-  (replace-regexp-in-string
-   "\"" "&quot;" (org-html-encode-plain-text str)))
-
-(defun org-pelican-md--protect-string* (str)
-  (org-pelican--protect-tag
-   (org-pelican-md--protect-string str)))
 
 (defun org-pelican-md---build-meta-info (name var func)
   (and (org-string-nw-p var)
@@ -117,10 +109,10 @@ INFO is a plist used as a communication channel."
    "Title: %s"
    ;; method to build generic metainfo
    '(lambda (name var)
-      (org-pelican-md---build-meta-info name var 'org-pelican-md--protect-string))
+      (org-pelican-md---build-meta-info name var 'org-pelican--protect-string))
    ;; method to build compact metainfo
    '(lambda (name var)
-      (org-pelican-md---build-meta-info name var 'org-pelican-md--protect-string*))
+      (org-pelican-md---build-meta-info name var 'org-pelican--protect-string*))
    ;; method to build toc
    '(lambda (depth info)
       ;;(org-pelican-html-toc depth info)

@@ -132,15 +132,6 @@ contents as a string, or nil if it is empty."
 
 ;;; Template
 
-(defun org-pelican-html--protect-string (str)
-  "Convert \" -> &quot;"
-  (replace-regexp-in-string
-   "\"" "&quot;" (org-html-encode-plain-text str)))
-
-(defun org-pelican-html--protect-string* (str)
-  (org-pelican--protect-tag
-   (org-pelican-html--protect-string str)))
-
 (defun org-pelican-html---build-meta-info (name var func)
   (and (org-string-nw-p var)
        (concat
@@ -160,10 +151,10 @@ INFO is a plist used as a communication channel."
    "<title>%s</title>"
    ;; method to build generic metainfo
    '(lambda (name var)
-      (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string))
+      (org-pelican-html---build-meta-info name var 'org-pelican--protect-string))
    ;; method to build compact metainfo
    '(lambda (name var)
-      (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string*))
+      (org-pelican-html---build-meta-info name var 'org-pelican--protect-string*))
    ;; method to build toc
    '(lambda (depth info)
       (org-pelican-html-toc depth info))))

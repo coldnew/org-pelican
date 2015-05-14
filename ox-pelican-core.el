@@ -52,6 +52,15 @@
      "@" "-"
      tag))))
 
+(defun org-pelican--protect-string (str)
+  "Convert \" -> &quot;"
+  (replace-regexp-in-string
+   "\"" "&quot;" (org-html-encode-plain-text str)))
+
+(defun org-pelican--protect-string* (str)
+  (org-pelican--protect-tag
+   (org-pelican--protect-string str)))
+
 
 ;;;; Paragraph
 
