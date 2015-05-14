@@ -106,11 +106,22 @@ a communication channel."
   (let ((title (plist-get info :title)))
     (org-export-data (or title "") info)))
 
+(defun org-pelican--parse-author (info)
+  (and (plist-get info :with-author)
+       (let ((auth (plist-get info :author)))
+         (and auth
+              ;; Return raw Org syntax, skipping non
+              ;; exportable objects.
+              (org-element-interpret-data
+               (org-element-map auth
+                   (cons 'plain-text org-element-all-objects)
+                 'identity info))))))
+
 (defun org-pelican--build-gravatar (info)
   (let ((email (plist-get info :email)))
     (if email
         (format "http://www.gravatar.com/avatar/%s" (md5 email))
-        "")))
+      "")))
 
 
 (provide 'ox-pelican-core)

@@ -180,19 +180,24 @@ INFO is a plist used as a communication channel."
             (build--metainfo name var 'protect-string-compact))
            )
     (let ((date (org-pelican--parse-date info))
+          (description (plist-get info :description))
+          (keywords (plist-get info :keywords))
           (category (plist-get info :category))
           (tags (plist-get info :tags))
           (save_as (plist-get info :save_as))
           (url (plist-get info :url))
           (slug (plist-get info :slug)))
       (concat
-       ;; Use ox-html to generate basic metainfo
-       (org-html--build-meta-info info)
 
-       (org-html-close-tag "meta" " name=\"generator\" content=\"org-pelican\"" info)
-       "\n"
+       (build-generic-metainfo "generator" "org-pelican")
 
+       (format "<title>%s</title>\n" (org-pelican--parse-title info))
+
+       (build-generic-metainfo "author" (org-pelican--parse-author info))
        (build-generic-metainfo "date" date)
+
+       (build-generic-metainfo "description" description)
+       (build-generic-metainfo "keywords" keywords)
 
        (build-generic-metainfo "url" url)
        (build-generic-metainfo "save_as" save_as)
@@ -219,15 +224,15 @@ holding export options."
   (concat
    (org-html-doctype info)
    "\n"
-   (concat "<html"
-           (when (org-html-xhtml-p info)
-             (format
-              " xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\""
-              (plist-get info :language) (plist-get info :language)))
-           ">\n")
+   ;; (concat "<html"
+   ;;         (when (org-html-xhtml-p info)
+   ;;           (format
+   ;;            " xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\""
+   ;;            (plist-get info :language) (plist-get info :language)))
+   ;;         ">\n")
    "<head>\n"
    (org-pelican-html--build-meta-info info)
-   (org-html--build-head info)
+;;   (org-html--build-head info)
    "</head>\n"
    "<body>\n"
    (let ((link-up (org-trim (plist-get info :html-link-up)))
