@@ -53,26 +53,13 @@
     (src-block . org-pelican-md-src-block)
     )
   :options-alist
-  '(
-    ;; Title: My super title
-    ;; Date: 2010-12-03 10:20
-    ;; Modified: 2010-12-05 19:30
-    ;; Category: Python
-    ;; Tags: pelican, publishing
-    ;; Slug: my-super-post
-    ;; Authors: Alexis Metaireau, Conan Doyle
-    ;; Summary: Short version for index and feeds
-
-    ;; ;; pelican metadata
+  '(;; ;; pelican metadata
     (:date     "DATE"       nil     nil)
     (:category "CATEGORY"   nil     nil)
     (:tags     "TAGS"       nil     nil)
     (:url      "URL"        nil     nil)
     (:save_as  "SAVE_AS"    nil     nil)
     (:slug     "SLUG"       nil     nil)
-    ;; ;; override default ox-html.el options-alist
-    ;; (:html-head-include-scripts nil "html-scripts" nil)
-    ;; (:html-head-include-default-style nil "html-style" nil)
     ))
 
 
