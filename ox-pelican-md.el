@@ -30,7 +30,6 @@
 
 (eval-when-compile (require 'cl-lib))
 
-(require 'noflet)
 (require 'f)
 (require 'ox-md)
 (require 'ox-publish)
