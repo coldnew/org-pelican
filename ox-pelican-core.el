@@ -123,6 +123,21 @@ a communication channel."
         (format "http://www.gravatar.com/avatar/%s" (md5 email))
       "")))
 
+
+;;;; Converter
+(defun org-pelican--protect-tag (tag)
+  "Convert:
+       _     ->  <space>
+       @     ->  -
+     <space> ->  ,
+"
+  (replace-regexp-in-string
+   "_" " "
+   (replace-regexp-in-string
+    " " ","
+    (replace-regexp-in-string
+     "@" "-"
+     tag))))
 
 (provide 'ox-pelican-core)
 ;;; ox-pelican-core.el ends here.

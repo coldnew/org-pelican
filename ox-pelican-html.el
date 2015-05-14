@@ -132,6 +132,25 @@ contents as a string, or nil if it is empty."
 
 ;;; Template
 
+(defun org-pelican-html--protect-string (str)
+  "Convert \" -> &quot;"
+  (replace-regexp-in-string
+   "\"" "&quot;" (org-html-encode-plain-text str)))
+
+(defun org-pelican-html--protect-string* (str)
+  (org-pelican--protect-tag
+   (org-pelican-html--protect-string str)))
+
+(defun org-pelican-html---build-meta-info (name var func)
+  (and (org-string-nw-p var)
+       (concat
+        (org-html-close-tag "meta"
+                            (format " name=\"%s\" content=\"%s\""
+                                    name
+                                    (funcall func var))
+                            info)
+        "\n")))
+
 ;; :date: 2010-10-03 10:20
 ;; :modified: 2010-10-04 18:40
 ;; :tags: thats, awesome
@@ -144,42 +163,16 @@ contents as a string, or nil if it is empty."
 (defun org-pelican-html--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
-  (noflet ((protect-string
-            (str)
-            (replace-regexp-in-string
-             "\"" "&quot;" (org-html-encode-plain-text str)))
-
-           (protect-string-compact
-            ;; FIXME: add option to enable/disable this
-            ;; convert:
-            ;;   _        -> space
-            ;;   <space>  -> ,
-            ;;   @        -> -
-            (str)
-            (replace-regexp-in-string
-             "_" " "
-             (replace-regexp-in-string
-              " " ","
-              (replace-regexp-in-string
-               "@" "-"  (protect-string str)))))
-           (build--metainfo (name var func)
-                            (and (org-string-nw-p var)
-                                 (concat
-                                  (org-html-close-tag "meta"
-                                                      (format " name=\"%s\" content=\"%s\""
-                                                              name
-                                                              (funcall func var))
-                                                      info)
-                                  "\n")))
-
-           (build-generic-metainfo
+  (noflet ((metainfo
             (name var)
-            (build--metainfo name var 'protect-string))
-           (build-compact-metainfo
+            (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string))
+           (metainfo*
             (name var)
-            (build--metainfo name var 'protect-string-compact))
-           )
-    (let ((date (org-pelican--parse-date info))
+            (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string*)))
+    (let ((author (org-pelican--parse-author info))
+          (title (org-pelican--parse-title info))
+          (date (org-pelican--parse-date info))
+          (gravatar (org-pelican--build-gravatar info))
           (description (plist-get info :description))
           (keywords (plist-get info :keywords))
           (category (plist-get info :category))
@@ -189,32 +182,29 @@ INFO is a plist used as a communication channel."
           (slug (plist-get info :slug)))
       (concat
 
-       (build-generic-metainfo "generator" "org-pelican")
+       (metainfo "generator" "org-pelican")
 
-       (format "<title>%s</title>\n" (org-pelican--parse-title info))
+       (format "<title>%s</title>\n" title)
 
-       (build-generic-metainfo "author" (org-pelican--parse-author info))
-       (build-generic-metainfo "date" date)
+       (metainfo "author" author)
+       (metainfo "author_gravatar" gravatar)
+       (metainfo "date" date)
 
-       (build-generic-metainfo "description" description)
-       (build-generic-metainfo "keywords" keywords)
+       (metainfo "description" description)
+       (metainfo "keywords" keywords)
 
-       (build-generic-metainfo "url" url)
-       (build-generic-metainfo "save_as" save_as)
-       (build-generic-metainfo "slug" slug)
-
-       ;; gravatar
-       (build-generic-metainfo "author_gravatar"
-                               (org-pelican--build-gravatar info))
+       (metainfo "url" url)
+       (metainfo "save_as" save_as)
+       (metainfo "slug" slug)
 
        ;; compact version
-       (build-compact-metainfo "category" category)
-       (build-compact-metainfo "tags" tags)
+       (metainfo* "category" category)
+       (metainfo* "tags" tags)
 
        ;; Table of contents
        (let ((depth (plist-get info :with-toc)))
          (when depth
-           (build-generic-metainfo "toc" (org-pelican-html-toc depth info))))
+           (metainfo "toc" (org-pelican-html-toc depth info))))
        ))))
 
 (defun org-pelican-html-template (contents info)
@@ -232,7 +222,7 @@ holding export options."
    ;;         ">\n")
    "<head>\n"
    (org-pelican-html--build-meta-info info)
-;;   (org-html--build-head info)
+   ;;   (org-html--build-head info)
    "</head>\n"
    "<body>\n"
    (let ((link-up (org-trim (plist-get info :html-link-up)))
