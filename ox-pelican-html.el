@@ -151,61 +151,22 @@ contents as a string, or nil if it is empty."
                             info)
         "\n")))
 
-;; :date: 2010-10-03 10:20
-;; :modified: 2010-10-04 18:40
-;; :tags: thats, awesome
-;; :category: yeah
-;; :slug: my-super-post
-;; :authors: Alexis Metaireau, Conan Doyle
-;; :summary: Short version for index and feeds
-;; :lang: en
-;; :translation: true
 (defun org-pelican-html--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
-  (noflet ((metainfo
-            (name var)
-            (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string))
-           (metainfo*
-            (name var)
-            (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string*)))
-    (let ((author (org-pelican--parse-author info))
-          (title (org-pelican--parse-title info))
-          (date (org-pelican--parse-date info))
-          (gravatar (org-pelican--build-gravatar info))
-          (description (plist-get info :description))
-          (keywords (plist-get info :keywords))
-          (category (plist-get info :category))
-          (tags (plist-get info :tags))
-          (save_as (plist-get info :save_as))
-          (url (plist-get info :url))
-          (slug (plist-get info :slug)))
-      (concat
-
-       (metainfo "generator" "org-pelican")
-
-       (format "<title>%s</title>\n" title)
-
-       (metainfo "author" author)
-       (metainfo "author_gravatar" gravatar)
-       (metainfo "date" date)
-
-       (metainfo "description" description)
-       (metainfo "keywords" keywords)
-
-       (metainfo "url" url)
-       (metainfo "save_as" save_as)
-       (metainfo "slug" slug)
-
-       ;; compact version
-       (metainfo* "category" category)
-       (metainfo* "tags" tags)
-
-       ;; Table of contents
-       (let ((depth (plist-get info :with-toc)))
-         (when depth
-           (metainfo "toc" (org-pelican-html-toc depth info))))
-       ))))
+  (org-pelican--build-meta-info
+   info
+   ;; title format
+   "<title>%s</title>"
+   ;; method to build generic metainfo
+   '(lambda (name var)
+      (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string))
+   ;; method to build compact metainfo
+   '(lambda (name var)
+      (org-pelican-html---build-meta-info name var 'org-pelican-html--protect-string*))
+   ;; method to build toc
+   '(lambda (depth info)
+      (org-pelican-html-toc depth info))))
 
 (defun org-pelican-html-template (contents info)
   "Return complete document string after HTML conversion.

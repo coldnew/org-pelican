@@ -95,60 +95,36 @@ a communication channel."
 
 
 ;;;; Template
+(defun org-pelican-md--protect-string (str)
+  "Convert \" -> &quot;"
+  (replace-regexp-in-string
+   "\"" "&quot;" (org-html-encode-plain-text str)))
+
+(defun org-pelican-md--protect-string* (str)
+  (org-pelican--protect-tag
+   (org-pelican-md--protect-string str)))
+
+(defun org-pelican-md---build-meta-info (name var func)
+  (and (org-string-nw-p var)
+       (format "%s: %s\n" (capitalize name) (funcall func var))))
+
 (defun org-pelican-md--build-meta-info (info)
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
-  (noflet ((protect-string
-            (str)
-            (replace-regexp-in-string
-             "\"" "&quot;" (org-html-encode-plain-text str)))
-
-           (protect-string-compact
-            ;; FIXME: add option to enable/disable this
-            ;; convert:
-            ;;   _        -> space
-            ;;   <space>  -> ,
-            ;;   @        -> -
-            (str)
-            (replace-regexp-in-string
-             "_" " "
-             (replace-regexp-in-string
-              " " ","
-              (replace-regexp-in-string
-               "@" "-"  (protect-string str)))))
-           (build--metainfo (name var func)
-                            (and (org-string-nw-p var)
-                                 (format "%s: %s\n" name (funcall func var))))
-
-           (build-generic-metainfo
-            (name var)
-            (build--metainfo name var 'protect-string))
-           (build-compact-metainfo
-            (name var)
-            (build--metainfo name var 'protect-string-compact))
-           )
-    (let ((date (org-pelican--parse-date info))
-          (title (org-pelican--parse-title info))
-          (category (plist-get info :category))
-          (tags (plist-get info :tags))
-          (save_as (plist-get info :save_as))
-          (url (plist-get info :url))
-          (slug (plist-get info :slug)))
-      (concat
-       (build-generic-metainfo "Title" info)
-       (build-generic-metainfo "Date" date)
-       (build-generic-metainfo "Url" url)
-       (build-generic-metainfo "Save_as" save_as)
-       (build-generic-metainfo "Slug" slug)
-
-       (build-generic-metainfo "Author_gravatar"
-                               (org-pelican--build-gravatar info))
-
-       ;; compact version
-       (build-compact-metainfo "Category" category)
-       (build-compact-metainfo "Tags" tags)
-       ))))
-
+  (org-pelican--build-meta-info
+   info
+   ;; title format
+   "Title: %s"
+   ;; method to build generic metainfo
+   '(lambda (name var)
+      (org-pelican-md---build-meta-info name var 'org-pelican-md--protect-string))
+   ;; method to build compact metainfo
+   '(lambda (name var)
+      (org-pelican-md---build-meta-info name var 'org-pelican-md--protect-string*))
+   ;; method to build toc
+   '(lambda (depth info)
+      ;;(org-pelican-html-toc depth info)
+      )))
 
 (defun org-pelican-md-template (contents info)
   "Return complete document string after Markdown conversion.

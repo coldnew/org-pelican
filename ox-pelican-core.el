@@ -36,6 +36,23 @@
 (require 'ox-publish)
 
 
+;;;; Internal functions
+
+(defun org-pelican--protect-tag (tag)
+  "Convert:
+       _     ->  <space>
+       @     ->  -
+     <space> ->  ,
+"
+  (replace-regexp-in-string
+   "_" " "
+   (replace-regexp-in-string
+    " " ","
+    (replace-regexp-in-string
+     "@" "-"
+     tag))))
+
+
 ;;;; Paragraph
 
 (defun org-pelican--paragraph (func paragraph contents info)
@@ -117,27 +134,63 @@ a communication channel."
                    (cons 'plain-text org-element-all-objects)
                  'identity info))))))
 
-(defun org-pelican--build-gravatar (info)
+(defun org-pelican--parse-gravatar (info)
   (let ((email (plist-get info :email)))
     (if email
         (format "http://www.gravatar.com/avatar/%s" (md5 email))
       "")))
 
-
-;;;; Converter
-(defun org-pelican--protect-tag (tag)
-  "Convert:
-       _     ->  <space>
-       @     ->  -
-     <space> ->  ,
+;; :date: 2010-10-03 10:20
+;; :modified: 2010-10-04 18:40
+;; :tags: thats, awesome
+;; :category: yeah
+;; :slug: my-super-post
+;; :authors: Alexis Metaireau, Conan Doyle
+;; :summary: Short version for index and feeds
+;; :lang: en
+;; :translation: true
+(defun org-pelican--build-meta-info
+    (info title-format metainfo metainfo* toc)
+  "Return meta tags for exported document.
+INFO is a plist used as a communication channel.
 "
-  (replace-regexp-in-string
-   "_" " "
-   (replace-regexp-in-string
-    " " ","
-    (replace-regexp-in-string
-     "@" "-"
-     tag))))
+  (let ((author (org-pelican--parse-author info))
+        (title (org-pelican--parse-title info))
+        (date (org-pelican--parse-date info))
+        (gravatar (org-pelican--parse-gravatar info))
+        (description (plist-get info :description))
+        (keywords (plist-get info :keywords))
+        (category (plist-get info :category))
+        (tags (plist-get info :tags))
+        (save_as (plist-get info :save_as))
+        (url (plist-get info :url))
+        (slug (plist-get info :slug)))
+    (concat
+
+     (format title-format title)
+     "\n"
+
+     (funcall metainfo "generator" "org-pelican")
+     (funcall metainfo "author" author)
+     (funcall metainfo "author_gravatar" gravatar)
+     (funcall metainfo "date" date)
+
+     (funcall metainfo "description" description)
+     (funcall metainfo "keywords" keywords)
+
+     (funcall metainfo "url" url)
+     (funcall metainfo "save_as" save_as)
+     (funcall metainfo "slug" slug)
+
+     ;; compact version
+     (funcall metainfo* "category" category)
+     (funcall metainfo* "tags" tags)
+
+     ;; Table of contents
+     (let ((depth (plist-get info :with-toc)))
+       (when depth
+         (funcall metainfo "toc" (funcall toc depth info))))
+     )))
 
 (provide 'ox-pelican-core)
 ;;; ox-pelican-core.el ends here.
