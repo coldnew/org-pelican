@@ -214,15 +214,8 @@ holding export options."
   (concat
    (org-html-doctype info)
    "\n"
-   ;; (concat "<html"
-   ;;         (when (org-html-xhtml-p info)
-   ;;           (format
-   ;;            " xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\""
-   ;;            (plist-get info :language) (plist-get info :language)))
-   ;;         ">\n")
    "<head>\n"
    (org-pelican-html--build-meta-info info)
-   ;;   (org-html--build-head info)
    "</head>\n"
    "<body>\n"
    (let ((link-up (org-trim (plist-get info :html-link-up)))
