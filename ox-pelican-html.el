@@ -95,7 +95,8 @@ In this function, we also add link file"
         (html-link (org-pelican--link 'org-html-link link desc info)))
 
     ;; fancybox support
-    ;; TODO: add option to disable this
+    ;; convert:
+    ;;  <img src="link_of_image"/></a>    ->    <a class="fancybox" href="link_of_image"><img src="link_of_image"/></a>
     (replace-regexp-in-string
      "<img[^>]+src=\"\\(.*?\\)\"\\([^>]*>\\)" "<a class=\"fancybox\" href=\"\\1\"><img src=\"\\1\" \\2</a>" html-link)
     ))
