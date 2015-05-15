@@ -51,16 +51,7 @@
     ;; Make compatible with pelican
     (src-block . org-pelican-md-src-block)
     )
-  :options-alist
-  '(;; ;; pelican metadata
-    (:date     "DATE"       nil     nil)
-    (:category "CATEGORY"   nil     nil)
-    (:tags     "TAGS"       nil     nil)
-    (:url      "URL"        nil     nil)
-    (:save_as  "SAVE_AS"    nil     nil)
-    (:slug     "SLUG"       nil     nil)
-    (:status   "STATUS"     nil     nil)
-    ))
+  :options-alist org-pelican--options-alist)
 
 
 ;;;; Paragraph

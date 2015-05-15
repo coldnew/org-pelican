@@ -36,6 +36,20 @@
 (require 'ox-publish)
 
 
+;;;; Backend general
+
+;; pelican metadata
+(defvar org-pelican--options-alist
+  '((:date     "DATE"       nil     nil)
+    (:category "CATEGORY"   nil     nil)
+    (:tags     "TAGS"       nil     nil)
+    (:url      "URL"        nil     nil)
+    (:save_as  "SAVE_AS"    nil     nil)
+    (:slug     "SLUG"       nil     nil)
+    (:status   "STATUS"     nil     nil)
+    ))
+
+
 ;;;; Internal functions
 
 (defun org-pelican--protect-tag (tag)

@@ -51,19 +51,7 @@
     ;; convert relative link to let pelican can recognize
     (link . org-pelican-html-link)
     )
-  :options-alist
-  '(;; pelican metadata
-    (:date     "DATE"       nil     nil)
-    (:category "CATEGORY"   nil     nil)
-    (:tags     "TAGS"       nil     nil)
-    (:url      "URL"        nil     nil)
-    (:save_as  "SAVE_AS"    nil     nil)
-    (:slug     "SLUG"       nil     nil)
-    (:status   "STATUS"     nil     nil)
-    ;; override default ox-html.el options-alist
-    (:html-head-include-scripts nil "html-scripts" nil)
-    (:html-head-include-default-style nil "html-style" nil)
-    ))
+  :options-alist org-pelican--options-alist)
 
 
 ;;;; Paragraph
