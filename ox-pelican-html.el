@@ -93,13 +93,12 @@ INFO is a plist holding contextual information.  See
 In this function, we also add link file"
   (let ((org-html-link-org-files-as-html nil)
         (html-link (org-pelican--link 'org-html-link link desc info)))
+
     ;; fancybox support
+    ;; TODO: add option to disable this
     (replace-regexp-in-string
      "<img[^>]+src=\"\\(.*?\\)\"\\([^>]*>\\)" "<a class=\"fancybox\" href=\"\\1\"><img src=\"\\1\" \\2</a>" html-link)
     ))
-;;"<img[^>]+src=\"\\(.*?\\)\"[^>]*>"
-;;      "<img[^>]+src=\"\\(.*?\\)\"\\([^>]*\\)"
-;; <a class="fancybox" href="link_of_image"><img src="link_of_image"/></a>
 
 ;;; Tables of Contents
 
