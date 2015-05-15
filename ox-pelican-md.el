@@ -59,6 +59,7 @@
     (:url      "URL"        nil     nil)
     (:save_as  "SAVE_AS"    nil     nil)
     (:slug     "SLUG"       nil     nil)
+    (:status   "STATUS"     nil     nil)
     ))
 
 

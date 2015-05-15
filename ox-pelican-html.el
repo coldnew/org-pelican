@@ -59,6 +59,7 @@
     (:url      "URL"        nil     nil)
     (:save_as  "SAVE_AS"    nil     nil)
     (:slug     "SLUG"       nil     nil)
+    (:status   "STATUS"     nil     nil)
     ;; override default ox-html.el options-alist
     (:html-head-include-scripts nil "html-scripts" nil)
     (:html-head-include-default-style nil "html-style" nil)

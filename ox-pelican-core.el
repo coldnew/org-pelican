@@ -158,6 +158,8 @@ a communication channel."
 ;; :summary: Short version for index and feeds
 ;; :lang: en
 ;; :translation: true
+;; :status: draft
+;; :status: published
 (defun org-pelican--build-meta-info
     (info title-format metainfo metainfo* toc)
   "Return meta tags for exported document.
@@ -173,7 +175,8 @@ INFO is a plist used as a communication channel.
         (tags (plist-get info :tags))
         (save_as (plist-get info :save_as))
         (url (plist-get info :url))
-        (slug (plist-get info :slug)))
+        (slug (plist-get info :slug))
+        (status (plist-get info :status))) ;; NOTE: value: draft, published
     (concat
 
      (format title-format title)
@@ -190,6 +193,7 @@ INFO is a plist used as a communication channel.
      (funcall metainfo "url" url)
      (funcall metainfo "save_as" save_as)
      (funcall metainfo "slug" slug)
+     (funcall metainfo "status" status)
 
      ;; compact version
      (funcall metainfo* "category" category)
