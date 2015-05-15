@@ -1,0 +1,22 @@
+# generate by emacs-blogit
+content/
+# generate by pelican
+output/
+# ignore cache
+cache/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Django stuff:
+*.log
+
+#
+*.pid.sass-cache/
+__pycache__/
+node_modules/
+bower_components/
+.deploy/
