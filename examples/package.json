@@ -1,0 +1,20 @@
+{
+  "name": "org-pelican-demo",
+  "version": "0.1.0",
+  "description": "org-pelican demo site",
+  "author": {
+    "name": "Yen-Chin, Lee",
+    "email": "coldnew.tw@gmail.com"
+  },
+  "homepage": "http://coldnew.github.io/org-pelican",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.7.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-gh-pages": "^0.5.1",
+    "gulp-run": "^1.6.8",
+    "run-sequence": "^1.1.0",
+  },
+  "scripts": {}
+}
