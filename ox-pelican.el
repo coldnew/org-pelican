@@ -56,15 +56,15 @@
 ;;;; End User Functions
 
 ;;;###autoload
-(defun org-pelican-mark-as-draft ()
-  "Mark current org-mode file as pelican draft file."
+(defun org-pelican-toggle-status ()
+  "Toggle current org-mode file status as `draft' or `published'.
+If #+STATUS: tag not exist, set current status as `draft'."
   (interactive)
-  (blogit--modify-option "STATUS" "draft"))
+  (let ((status (or (blogit-get-option :status) "published")))
+    (if (string= status "draft")
+        (blogit-set-option :status "published")
+      (blogit-set-option :status "draft"))))
 
-(defun org-pelican-mark-as-published ()
-  "Mark current org-mode file as pelican published file."
-  (interactive)
-  (blogit--modify-option "STATUS" "published"))
 
 (provide 'ox-pelican)
 ;;; ox-pelican.el ends here.
