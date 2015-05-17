@@ -190,6 +190,7 @@ INFO is a plist used as a communication channel.
         (save_as (plist-get info :save_as))
         (url (plist-get info :url))
         (slug (plist-get info :slug))
+        (lang (plist-get info :language))
         (status (plist-get info :status))) ;; NOTE: value: draft, published
     (concat
 
@@ -201,6 +202,7 @@ INFO is a plist used as a communication channel.
      (funcall metainfo "author_gravatar" gravatar)
      (funcall metainfo "date" date)
 
+     (funcall metainfo "lang" lang)
      (funcall metainfo "description" description)
      (funcall metainfo "keywords" keywords)
 

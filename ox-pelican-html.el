@@ -41,11 +41,10 @@
 
 (org-export-define-derived-backend 'pelican-html 'html
   :translate-alist
-  '(
+  '(;; drop most of nouse html header
     (template . org-pelican-html-template)
     ;; Fix for multibyte language
     (paragraph . org-pelican-html-paragraph)
-    ;; FIXME: this should move back to blogit?
     ;; Fix toc for blogit theme
     (inner-template . org-pelican-html-inner-template)
     ;; convert relative link to let pelican can recognize
