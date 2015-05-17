@@ -6,7 +6,7 @@
 ;; Keywords:
 ;; X-URL: http://github.com/coldnew/org-pelican
 ;; Version: 0.1
-;; Package-Requires: ((org "8.0") (cl-lib "0.5") (f "0.17.2"))
+;; Package-Requires: ((org "8.0") (cl-lib "0.5") (f "0.17.2") (blogit "0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -30,6 +30,9 @@
 
 (eval-when-compile (require 'cl-lib))
 
+(require 'blogit)
+
+
 ;;;; Group
 
 (defgroup org-pelican nil
@@ -38,13 +41,30 @@
   :group 'org-export
   :link '(url-link :tag "Github" "https://github.com/coldnew/org-pelican"))
 
+
 ;;;; Load all pelican functions
+;;
 ;; ox-pelican-core.el -- core or common use functions
 ;; ox-pelican-html.el -- HTML exporter
 ;; ox-pelican-md.el   -- Markdown exporter
+;; ox-pelican-rst.el  -- Rst exporter (not done yet)
 ;;
 (mapcar (lambda (x) (require (intern (format "ox-pelican-%s" x)) nil t))
         '("core" "html" "md"))
+
+
+;;;; End User Functions
+
+;;;###autoload
+(defun org-pelican-mark-as-draft ()
+  "Mark current org-mode file as pelican draft file."
+  (interactive)
+  (blogit--modify-option "STATUS" "draft"))
+
+(defun org-pelican-mark-as-published ()
+  "Mark current org-mode file as pelican published file."
+  (interactive)
+  (blogit--modify-option "STATUS" "published"))
 
 (provide 'ox-pelican)
 ;;; ox-pelican.el ends here.
