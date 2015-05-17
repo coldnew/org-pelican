@@ -42,6 +42,14 @@
   :link '(url-link :tag "Github" "https://github.com/coldnew/org-pelican"))
 
 
+;;;; Custom
+
+(defcustom org-pelican-date-format "%Y-%02m-%02d %02H:%02M:%02S"
+  "Format use in #+DATE: metadata."
+  :group 'org-pelican
+  :type 'string)
+
+
 ;;;; Load all pelican functions
 ;;
 ;; ox-pelican-core.el -- core or common use functions
@@ -65,6 +73,15 @@ If #+STATUS: tag not exist, set current status as `draft'."
         (blogit-set-option :status "published")
       (blogit-set-option :status "draft"))))
 
+;;;###autoload
+(defun org-pelican-update-date ()
+  "Update #+DATE: tag with current date info."
+  (interactive)
+  (blogit-set-option :date
+                     (format-time-string org-pelican-date-format)))
+
+
+;; TODO: add minor mode for syntax highlight
 
 (provide 'ox-pelican)
 ;;; ox-pelican.el ends here.
