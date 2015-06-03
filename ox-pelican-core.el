@@ -133,8 +133,8 @@ a communication channel."
   (let ((date (car (plist-get info :date))))
     (and (org-string-nw-p date)
          (if (stringp date)
-             ;; FIXME: move to blogit?
-             ;; backward compability with blogit
+             ;; raw date info: 2013-08-04 23:28:44
+             ;; FIXME: does this also work for `2013/08/04 23:28:44' ?
              date
            ;; parse org-timestamp
            (format-time-string "%Y-%m-%d %H:%M:%S"
@@ -146,7 +146,9 @@ a communication channel."
   (let ((title (plist-get info :title)))
     (org-export-data (or title "") info)))
 
+;; TODO: how about #+AUTHORS: ?
 (defun org-pelican--parse-author (info)
+  "Parse #+AUTOHR: value."
   (and (plist-get info :with-author)
        (let ((auth (plist-get info :author)))
          (and auth
@@ -158,6 +160,7 @@ a communication channel."
                  'identity info))))))
 
 (defun org-pelican--parse-gravatar (info)
+  "Generate metadata for gravatar from #+EMAIL:."
   (let ((email (plist-get info :email)))
     (if email
         (format "http://www.gravatar.com/avatar/%s" (md5 email))
