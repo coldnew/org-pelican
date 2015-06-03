@@ -1,10 +1,11 @@
 #+TITLE: org-pelican -- org-mde exporter for pelican
 
-org-pelican is an org-mode exporter for [[https://github.com/getpelican/pelican][pelican]] static site generator.
+org-pelican is an org-mode exporter for [[https://github.com/getpelican/pelican][pelican]] static site generator. I write
+this for my personal's [[http://coldnew.github.io][blog]].
 
-This project is under *EXPERIMENTAL* state and used by [[https://github.com/coldnew/emacs-blogit][emacs-blogit]] project,
-currently it only suppport generate =HTML= file to let pelican parse it.
-
+#+BEGIN_QUOTE
+This project is under development
+#+END_QUOTE
 
 * Features
 
@@ -18,9 +19,13 @@ currently it only suppport generate =HTML= file to let pelican parse it.
   Generate metadata for =toc=, which compatible with most pelican theme and it's
   no need to use [[https://github.com/ingwinlu/pelican-toc][pelican-toc]] plugin.
 
-- [ ] Fancybox
+- [X] Fancybox (HTML)
 
   Convert image link with fancybox support automatically.
+
+- [ ] Fancybox (MD)
+
+  Need to cheeck.
 
 * Pelican plugins support
 
@@ -30,3 +35,5 @@ org-pelican also add pelican plugins support, which add following features.
 
   If you publish .org file with generate pelican html/md file, you can use
   org-pelican plugin to copy .org file to output folder.
+
+- [ ] others ?
