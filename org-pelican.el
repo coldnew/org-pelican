@@ -1,4 +1,4 @@
-;;; ox-pelican.el --- Export org-mode to pelican.
+;;; org-pelican.el --- Export org-mode to pelican.
 
 ;; Copyright (c) 2015 Yen-Chin, Lee. (coldnew) <coldnew.tw@gmail.com>
 ;;
@@ -50,7 +50,7 @@
   :type 'string)
 
 
-;;;; Load all pelican functions
+;;;; Load all pelican exporter functions
 ;;
 ;; ox-pelican-core.el -- core or common use functions
 ;; ox-pelican-html.el -- HTML exporter
@@ -83,5 +83,5 @@ If #+STATUS: tag not exist, set current status as `draft'."
 
 ;; TODO: add minor mode for syntax highlight
 
-(provide 'ox-pelican)
-;;; ox-pelican.el ends here.
+(provide 'org-pelican)
+;;; org-pelican.el ends here.
