@@ -7,6 +7,23 @@ this for my personal's [[http://coldnew.github.io][blog]].
 This project is under development
 #+END_QUOTE
 
+* Backend
+
+org-pelican support following backend, which help you convert org-mode article to another type file
+
+- [X] Markdown
+
+  untest yet, but it might work.
+
+- [X] HTML
+
+  Currently use on my blog.
+
+- [ ] rst
+
+  Not done yet, since ox-rst depends on development version of org-mode (8.3)
+
+
 * Features
 
 - [X] Gravatar
