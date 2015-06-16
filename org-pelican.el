@@ -82,6 +82,9 @@ If #+STATUS: tag not exist, set current status as `draft'."
 
 
 ;; TODO: add minor mode for syntax highlight
+;; TODO: also copy images for blogit-user
+;; TODO: export file according to url (also make dir)
+;; TODO: check markdown syntax formate
 
 (provide 'org-pelican)
 ;;; org-pelican.el ends here.
