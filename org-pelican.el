@@ -86,5 +86,9 @@ If #+STATUS: tag not exist, set current status as `draft'."
 ;; TODO: export file according to url (also make dir)
 ;; TODO: check markdown syntax formate
 
+;; TODO: shipping image with {attatch} so we can put image with .org file in the same dir
+;;
+;; ref: https://github.com/getpelican/pelican/commit/d503ea436c1733c2fc596e5003bac2cb74d576c9
+
 (provide 'org-pelican)
 ;;; org-pelican.el ends here.
