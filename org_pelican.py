@@ -15,6 +15,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# TODO: also copy dirs shipped with org article
+
 class OrgFileGenerator(Generator):
     """Copy xxx.org.html to the output path with xx.html"""
 
