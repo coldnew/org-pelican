@@ -130,7 +130,7 @@ a communication channel."
 
 (defun org-pelican--parse-date (info)
   "Parse #+DATE: value."
-  (let ((date (car (plist-get info :date))))
+  (let ((date (plist-get info :date)))
     (and (org-string-nw-p date)
          (if (stringp date)
              ;; raw date info: 2013-08-04 23:28:44
